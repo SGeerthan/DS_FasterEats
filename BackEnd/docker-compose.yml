@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - '5559:5559'
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - '8080:8080'
+    depends_on:
+      - auth-service
+      - delivery-service
+      - order-service
+      - payment-service
+      - restaurant-service
+
+  delivery-service:
+    build: ./delivery-service
+    ports:
+      - "5003:5003"
+
+  order-service:
+    build: ./order-service
+    ports:
+      - "5004:5004"
+
+  payment-service:
+    build: ./payment-service
+    ports:
+      - "5025:5025"
+
+  restaurant-service:
+    build: ./restaurant-service
+    ports:
+      - "5560:5560"

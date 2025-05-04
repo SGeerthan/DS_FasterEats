@@ -1,0 +1,12 @@
+{
+    "profileImage": "https://i.pravatar.cc/120?img=5",
+    "heading": "Distributed Systems Study Group",
+    "progressItems": [
+      { "title": "Progress 1", "link": "#", "status": "Complete" },
+      { "title": "Progress 2", "link": "#", "status": "Pending"   },
+      { "title": "Progress 3", "link": "#", "status": "Pending"   },
+      { "title": "Progress 4", "link": "#", "status": "Ongoing"   },
+      { "title": "Progress 5", "link": "#", "status": "Pending"   }
+    ]
+  }
+  
