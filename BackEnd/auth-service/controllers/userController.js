@@ -157,6 +157,7 @@ export const loginUser = async (req, res) => {
         role:           user.role,
         registerNumber: user.registerNumber,
         rating:         user.rating,
+        phone:          user.phone,
       },
     });
   } catch (err) {

@@ -11,7 +11,8 @@ import {
   uploadProfilePicture,
   uploadRestaurantImages,
   updateUserRole,
-  getPublicUser      // ← public‐profile fetch
+  getPublicUser,
+  rateUser       // ← public‐profile fetch
 } from "../controllers/userController.js";
 import { protect, adminOnly } from "../middleware/authMiddleware.js";
 import { upload } from "../helper/cloudinarySetUp.js";
@@ -51,5 +52,8 @@ router.post(
 
 /* ─── Public: fetch any user/restaurant by ID ─── */
 router.get("/:id", getPublicUser);
+
+
+router.post("/:id/rate", protect, rateUser);
 
 export default router;

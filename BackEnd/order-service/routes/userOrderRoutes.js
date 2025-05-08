@@ -1,20 +1,20 @@
-const express = require('express');
-const router = express.Router();
-const driverOrderController = require('../controllers/userOrderController');
-const couponController = require('../controllers/couponController'); 
+/* ------------  BackEnd/order-service/routes/userOrder.routes.js ------------- */
+const express  = require("express");
+const router   = express.Router();
+const ctrl     = require("../controllers/userOrderController");
 
-router.post('/', driverOrderController.createOrder);
-router.get("/:userId", driverOrderController.getUserOrders);
-router.put('/:id', driverOrderController.updateDeliveryStatus);
-router.delete('/:id', driverOrderController.deleteUserOrder);
+/* main CRUD */
+router.route("/")
+  .post(ctrl.createUserOrder)   // restaurant → delivery‑service
+  .get(ctrl.getUserOrders);     // list by ?user= or ?regNo=
 
-router.post('/orders/apply-coupon', couponController.applyCoupon);
+router.patch("/:id/status", ctrl.updateOrderStatus);   // accept / decline
 
-// Get all pending orders (orderStatus: false)
+/* driver‑side helpers */
+router.put("/orders/:orderId",            ctrl.acceptOrder);      // set OnTheWay
+router.put("/orders/complete/:orderId",   ctrl.completeDelivery); // set Delivered
+router.get("/pending",                    ctrl.getPendingOrders); // all orderStatus:false
 
-// Accept an order (update orderStatus to true, deliveryStatus to "On the Way")
-router.put("/orders/:orderId", driverOrderController.acceptOrder);
+router.delete("/:id",   ctrl.deleteUserOrder);
 
-// Complete the delivery (update deliveryStatus to "Delivered")
-router.put("/orders/complete/:orderId", driverOrderController.completeDelivery);
 module.exports = router;

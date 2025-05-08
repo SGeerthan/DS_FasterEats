@@ -1,47 +1,39 @@
+const axios      = require("axios");   
 const UserOrder = require("../model/userOrder"); // Updated model import
 const Coupon = require("../model/Coupon"); // Import the Coupon model
 const { v4: uuidv4 } = require("uuid"); // To generate unique coupon codes (Install uuid: `npm install uuid`)
-const  generateInvoice  = require("../utils/generateInvoice");
-const sendEmail = require("../utils/sendEmail");
 
 // Create new order when user places it
-exports.createOrder = async (req, res) => {
+exports.createUserOrder = async (req, res) => {
   try {
+    const { orderId } = req.body;
+
+    /* 1️⃣ If an order with this ID already exists, just return it */
+    const existing = await UserOrder.findOne({ orderId });
+    if (existing) {
+      return res.status(200).json(existing);   // 200 OK – nothing to do
+    }
+
+    /* 2️⃣ Otherwise create a brand‑new record */
     const userOrder = new UserOrder(req.body);
     await userOrder.save();
 
-    
+    /* Optional: create coupon logic stays unchanged … */
     let coupon = null;
-
     if (userOrder.totalAmount > 3000) {
-      const couponCode = `DISCOUNT-${uuidv4().slice(0, 8).toUpperCase()}`;
-      coupon = new Coupon({ code: couponCode, discountAmount: 500 });
+      coupon = new Coupon({
+        code: `DISCOUNT-${uuidv4().slice(0, 8).toUpperCase()}`,
+        discountAmount: 500,
+      });
       await coupon.save();
     }
 
-    const pdfBuffer = await generateInvoice(userOrder);
-
-    await sendEmail({
-      to: userOrder.email,
-      subject: `Your FasterEats Invoice – Order ${userOrder.orderId}`,
-      html: `<p>Hi ${userOrder.firstName || "User"},</p><p>Thank you for your order. Please find your invoice attached.</p>`,
-      attachments: [{
-        filename: `Invoice-${userOrder.orderId}.pdf`,
-        content: pdfBuffer,
-      }],
-    });
-
-    res.status(201).json({
-      message: "Order placed and invoice sent!",
-      order: userOrder,
-      coupon: coupon ? coupon : null,
-    });
+    res.status(201).json({ order: userOrder, coupon });
   } catch (err) {
-    console.error("Order Error:", err);
-    res.status(500).json({ error: "Something went wrong" });
+    console.error(err);
+    res.status(500).json({ message: "Failed saving order", error: err.message });
   }
 };
-
 
 // Get all placed orders
 
@@ -172,5 +164,45 @@ exports.completeDelivery = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Error completing delivery" });
+  }
+};
+
+exports.updateOrderStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { orderStatus, deliveryStatus } = req.body;
+
+    const updated = await UserOrder.findByIdAndUpdate(
+      id,
+      { orderStatus, deliveryStatus },
+      { new: true }
+    );
+
+    if (!updated) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    /* ── forward ONLY when accepted ── */
+    if (orderStatus === true) {
+      // strip Mongo meta so 5004 gets a clean doc
+      const { _id, __v, createdAt, updatedAt, ...clean } = updated.toObject();
+
+      try {
+        await axios.post("http://localhost:5004/api/user-orders", clean, {
+          headers: { "Content-Type": "application/json" },
+          // timeout optional
+        });
+      } catch (fwdErr) {
+        console.error("Forwarding to driver service failed:", fwdErr.message);
+        // still return 200 to caller; you might log / retry with a queue in prod
+      }
+    }
+
+    res.json(updated);
+  } catch (err) {
+    console.error(err);
+    res
+      .status(500)
+      .json({ message: "Failed updating order", error: err.message });
   }
 };

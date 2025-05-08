@@ -75,6 +75,8 @@ export default function FasterEats() {
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [errorProfile, setErrorProfile] = useState(null);
 
+  
+
   // fetch profile when sidebar opens
   useEffect(() => {
     if (!showSidebar || !user) return;
@@ -98,8 +100,9 @@ export default function FasterEats() {
   }, [showSidebar, user]);
 
   const goSearch = () => {
-    const kw = keyword.trim();
-    if (kw) navigate(`/search?kw=${encodeURIComponent(kw)}`);
+    if (keyword.trim()) {
+      navigate(`/ListFoods?search=${encodeURIComponent(keyword)}`);
+    }
   };
   const showAllFoods = () => navigate("/ListFoods");
 
@@ -208,36 +211,90 @@ export default function FasterEats() {
       )}
 
       {/* ---------------- Hero ---------------- */}
-      <section className="relative flex flex-col items-center text-center text-white bg-orange-500">
-        <div className="max-w-4xl py-20 px-6 z-10">
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl leading-tight">
-            Order food & groceries.
-            <br />
-            Discover best restaurants. <span className="text-black/70">FasterEats it!</span>
-          </h1>
-          <div className="flex flex-col gap-3 md:flex-row md:items-stretch md:gap-4 mt-8">
-            <select className="flex-1 md:max-w-xs px-4 py-3 rounded-lg text-gray-700" defaultValue="Colombo">
-              {["Colombo","Kandy","Galle","Jaffna","Matara"].map(c=><option key={c}>{c}</option>)}
-            </select>
-            <input value={keyword} onChange={e=>setKeyword(e.target.value)} placeholder="Search for restaurant, item or more" className="flex-1 px-4 py-3 rounded-lg text-gray-700"/>
-            <button onClick={goSearch} className="px-6 py-3 bg-white text-orange-600 font-semibold rounded-lg hover:bg-gray-100 transition">Search</button>
-            <button onClick={showAllFoods} className="px-6 py-3 bg-black/30 hover:bg-black/40 text-white font-semibold rounded-lg transition">Show All Foods</button>
-          </div>
-        </div>
-      </section>
+      <section className="relative bg-orange-500 text-white overflow-hidden">
+  {/* Right image fixed to top-right */}
+  <img
+    src="/public/kkk.webp"
+    alt="Groceries"
+    className="hidden md:block absolute top-0 right-0 w-82 h-auto z-0 pointer-events-none"
+  />
+
+  <div className="max-w-8xl mx-auto flex flex-col md:flex-row items-start px-4 py-16 md:py-10 relative z-10 gap-10">
+
+    {/* Left image */}
+    <div className="flex-shrink-0 md:ml-[80px]">
+      <img
+        src="/public/RIDER.png"
+        alt="Delivery Rider"
+        className="w-[300px] md:w-[380px] h-auto"
+      />
+    </div>
+
+    {/* Content */}
+    <div className="text-left w-full md:w-3/5 md:ml-[-30px]">
+      <h1 className="text-3xl md:text-5xl font-bold leading-tight">
+        <div className="mb-2">Order food & groceries.</div>
+        <div className="mb-6">Discover best restaurants.</div>
+        <div className="text-black/70 text-2xl md:text-4xl font-semibold mb-6">FasterEats it!</div>
+      </h1>
+
+      {/* Search Bar */}
+      <div className="mt-8 flex flex-col gap-3 md:flex-row md:items-stretch md:gap-4">
+        <select
+          className="flex-1 md:max-w-xs px-4 py-3 rounded-lg text-gray-700 text-base"
+          defaultValue="Colombo"
+        >
+          {["Colombo", "Kandy", "Galle", "Jaffna", "Matara"].map(c => (
+            <option key={c}>{c}</option>
+          ))}
+        </select>
+        <input
+          value={keyword}
+          onChange={e => setKeyword(e.target.value)}
+          placeholder="Search for restaurant, item"
+          className="flex-1 px-4 py-3 rounded-lg text-gray-700 text-base"
+        />
+        <button
+          onClick={goSearch}
+          className="px-6 py-3 bg-white text-orange-600 text-base font-semibold rounded-lg hover:bg-gray-100 transition"
+        >
+          Search
+        </button>
+        <button
+          onClick={showAllFoods}
+          className="px-6 py-3 bg-black/30 hover:bg-black/40 text-white text-base font-semibold rounded-lg transition"
+        >
+          Show All Foods
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
 
       {/* ---------------- Categories ---------------- */}
       <section className="max-w-screen-xl mx-auto px-6 py-16">
-        <h2 className="text-2xl font-semibold mb-6">What’s on your mind?</h2>
-        <div className="flex overflow-x-auto gap-10 pb-4">
-          {categories.map(c=>(
-            <div key={c.name} className="flex-shrink-0 text-center w-28">
-              <img src={c.img} alt={c.name} className="w-28 h-28 object-cover rounded-full"/>
-              <p className="mt-2 font-medium">{c.name}</p>
-            </div>
-          ))}
-        </div>
-      </section>
+      <h2 className="text-2xl font-semibold mb-6">What’s on your mind?</h2>
+      <div className="flex overflow-x-auto gap-10 pb-4">
+        {categories.map((c) => (
+          <button
+            key={c.name}
+            onClick={() => navigate(`/ListFoods?search=${encodeURIComponent(c.name)}`)}
+            className="flex-shrink-0 text-center w-28 focus:outline-none"
+          >
+            <img
+              src={c.img}
+              alt={c.name}
+              className="w-28 h-28 object-cover rounded-full"
+            />
+            <p className="mt-2 font-medium">{c.name}</p>
+          </button>
+        ))}
+      </div>
+    </section>
 
       {/* ---------------- Partner / Courier signup ---------------- */}
       <section className="max-w-screen-xl mx-auto px-6 py-20">

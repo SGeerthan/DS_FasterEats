@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const driverRoutes = require('./routes/driverRoutes');
+const userOrderRoutes = require("../delivery-service/routes/userOrder.routes.js");
 const cors = require('cors');
 const dotenv = require('dotenv');
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/drivers', driverRoutes);
+app.use("/api/user-orders", userOrderRoutes);
 
 // Connect to MongoDB and start server
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

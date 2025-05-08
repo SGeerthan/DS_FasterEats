@@ -1,87 +1,93 @@
-// src/pages/FoodUpload.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from "../hooks/useAuth";
 
-export default function FoodUpload() {
+export default function FoodUpload({ initial = null, onSuccess, onClose }) {
   const { token } = useAuth();
+  const [saving, setSaving] = useState(false);
   const [food, setFood] = useState({
     name: "",
-    description: "",
+    category: "Appetizer",
     price: "",
-    image: null
+    description: "",
+    image: null,
+    available: true
   });
-  const [saving, setSaving] = useState(false);
 
-  const handle = (e) =>
-    setFood({ ...food, [e.target.name]: e.target.value });
+  /* pre‑fill when editing */
+  useEffect(() => {
+    if (initial) {
+      setFood({
+        name: initial.name,
+        category: initial.category || "Appetizer",
+        price: initial.price,
+        description: initial.description || "",
+        image: null,
+        available: initial.available ?? true
+      });
+    }
+  }, [initial]);
 
-  const handleImage = (e) =>
-    setFood({ ...food, image: e.target.files[0] });
-
-  const reset = () =>
-    setFood({ name: "", description: "", price: "", image: null });
+  const handle    = (e) => setFood({ ...food, [e.target.name]: e.target.value });
+  const handleImg = (e) => setFood({ ...food, image: e.target.files[0] });
 
   const submit = async (e) => {
     e.preventDefault();
     if (!food.name || !food.price) return alert("Name & price required");
+
     setSaving(true);
     const fd = new FormData();
     Object.entries(food).forEach(([k, v]) => fd.append(k, v));
-    await axios.post("http://localhost:5560/foods", fd, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "multipart/form-data"
-      }
+
+    const url    = initial ? `http://localhost:5560/foods/${initial._id}` : "http://localhost:5560/foods";
+    const method = initial ? "put" : "post";
+
+    await axios[method](url, fd, {
+      headers: { Authorization: `Bearer ${token}`, "Content-Type": "multipart/form-data" }
     });
     window.dispatchEvent(new Event("foods:invalidate"));
     setSaving(false);
-    reset();
+    onSuccess && onSuccess();
+    onClose   && onClose();
   };
 
   return (
-    <form
-      onSubmit={submit}
-      className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 bg-white shadow p-6 rounded-lg"
-    >
-      <input
-        name="name"
-        value={food.name}
-        onChange={handle}
-        placeholder="Dish name"
-        className="col-span-full md:col-span-1 p-2 border rounded"
-        required
-      />
-      <input
-        name="price"
-        type="number"
-        value={food.price}
-        onChange={handle}
-        placeholder="Price (Rs)"
-        className="col-span-full md:col-span-1 p-2 border rounded"
-        required
-      />
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleImage}
-        className="col-span-full md:col-span-1"
-      />
-      <textarea
-        name="description"
-        value={food.description}
-        onChange={handle}
-        placeholder="Short description"
-        rows="3"
-        className="col-span-full p-2 border rounded"
-      />
-      <button
-        type="submit"
-        disabled={saving}
-        className="col-span-full md:col-span-1 bg-green-600 hover:bg-green-700 text-white py-2 rounded"
-      >
-        {saving ? "Saving…" : "Add dish"}
-      </button>
+    <form onSubmit={submit}
+          className="bg-white rounded-lg shadow p-6 grid gap-4 md:grid-cols-2">
+      <input name="name" value={food.name} onChange={handle}
+             placeholder="Dish name" className="p-3 border rounded" required />
+      <select name="category" value={food.category} onChange={handle}
+              className="p-3 border rounded">
+        {["Appetizer", "Main course", "Dessert", "Beverage"].map(c =>
+          <option key={c}>{c}</option>)}
+      </select>
+
+      <input name="price" type="number" value={food.price} onChange={handle}
+             placeholder="Price" className="p-3 border rounded" required />
+      <input type="file" accept="image/*" onChange={handleImg}
+             className="p-3 border rounded" />
+
+      <textarea name="description" rows="3" value={food.description}
+                onChange={handle} placeholder="Description"
+                className="md:col-span-2 p-3 border rounded" />
+
+      <label className="md:col-span-2 flex items-center gap-2">
+        <input type="checkbox" checked={food.available}
+               onChange={e => setFood({ ...food, available: e.target.checked })}
+               className="h-4 w-4 accent-blue-600" />
+        Available
+      </label>
+
+      <div className="md:col-span-2 flex justify-end gap-2">
+        {onClose && (
+          <button type="button" onClick={onClose}
+                  className="px-6 py-3 bg-gray-200 rounded">Cancel</button>
+        )}
+        <button type="submit" disabled={saving}
+                className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded">
+          {saving ? "Saving…" : initial ? "Update" : "Add Item"}
+        </button>
+      </div>
     </form>
   );
 }
