@@ -24,9 +24,9 @@ export default function DishModal({ token, initial, onClose, afterSave }) {
     };
 
     if (initial && initial._id) {
-      await axios.put(`http://localhost:8888/api/restaurant/foods/${initial._id}`, fd, { headers });
+      await axios.put(`http://localhost:5560/foods/${initial._id}`, fd, { headers });
     } else {
-      await axios.post("http://localhost:8888/api/restaurant/foods", fd, { headers });
+      await axios.post("http://localhost:5560/foods", fd, { headers });
     }
 
     setSaving(false);

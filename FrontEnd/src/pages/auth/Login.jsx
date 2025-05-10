@@ -43,8 +43,8 @@ export default function Login() {
   };
 
   /* ---------------- OAuth ---------------- */
-  const googleLogin = () => (window.location.href = "http://localhost:8888/api/auth/auth/google");
-  const facebookLogin = () => (window.location.href = "http://localhost:8888/api/auth/auth/facebook");
+  const googleLogin = () => (window.location.href = "http://localhost:5559/auth/google");
+  const facebookLogin = () => (window.location.href = "http://localhost:5559/auth/facebook");
 
   /* ---------------- UI ---------------- */
   return (

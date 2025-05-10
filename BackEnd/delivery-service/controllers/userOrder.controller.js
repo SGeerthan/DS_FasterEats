@@ -43,7 +43,7 @@ exports.createOrder = asyncHandler(async (req, res) => {
 
   try {
     // Send the SMS using the SMS API
-    const response = await axios.post("http://localhost:8888/api/notification/send-sms", smsData);
+    const response = await axios.post("http://localhost:3000/send-sms", smsData);
     console.log("SMS response:", response.data);  // Log the response data
   } catch (error) {
     // Log the detailed error response from the SMS API

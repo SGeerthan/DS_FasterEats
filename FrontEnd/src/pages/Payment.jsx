@@ -77,7 +77,7 @@ export default function Payment() {
       /* 2️⃣ save order in DB */
       try {
         await axios.post(
-          "http://localhost:8888/api/delivery/api/user-orders",
+          "http://localhost:5003/api/user-orders",
           orderPayload,
           {
             headers: {
@@ -85,7 +85,9 @@ export default function Payment() {
               ...(token && { Authorization: `Bearer ${token}` }),
             },
           }
+          
         );
+        console.log("done");
       } catch (err) {
         console.error(err);
         return alert("Failed to save order. Please try again.");
@@ -109,7 +111,7 @@ export default function Payment() {
         };
 
         try {
-          const resp = await fetch("http://localhost:8888/api/payment/payment/start", {
+          const resp = await fetch("http://localhost:5025/payment/start", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payReq),
@@ -120,8 +122,8 @@ export default function Payment() {
           window.payhere.startPayment({
             sandbox: true,
             merchant_id,
-            return_url: "http://localhost:8888/api/payment/payment/success",
-            cancel_url: "http://localhost:8888/api/payment/payment/cancel",
+            return_url: "http://localhost:5025/payment/success",
+            cancel_url: "http://localhost:5025/payment/cancel",
             notify_url: "http://sample.com/notify",
             order_id: payReq.order_id,
             items: payReq.items,

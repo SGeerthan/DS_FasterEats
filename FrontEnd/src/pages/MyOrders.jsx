@@ -141,7 +141,7 @@ export default function Orders() {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:8888/api/delivery/api/user-orders",
+          "http://localhost:5003/api/user-orders",
           { params: { user: user._id }, headers: authHdr() }
         );
         setOrders(Array.isArray(data) ? data : []);

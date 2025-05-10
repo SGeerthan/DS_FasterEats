@@ -1,11 +1,12 @@
 const express = require("express");
 const axios = require("axios");
+const cors = require('cors');
 
 const app = express();
 app.use(express.json());
-
+app.use(cors());
 // Replace with your actual API key from Textit.biz
-const TEXTIT_API_KEY = "2213gkd1610a3db9adtd23a3adh8723";
+const TEXTIT_API_KEY = "221dgkd16105d0905dtd1a53adh8733";
 
 app.post("/send-sms", async (req, res) => {
   const { to, message } = req.body;

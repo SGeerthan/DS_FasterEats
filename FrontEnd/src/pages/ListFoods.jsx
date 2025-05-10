@@ -190,7 +190,7 @@ const initialSearch = params.get("search") || "";
     useEffect(() => {
         (async () => {
             try {
-                const { data } = await axios.get("http://localhost:8888/api/restaurant/foods");
+                const { data } = await axios.get("http://localhost:5560/foods");
                 setFoods(data);
             } catch {
                 setErr("Failed to load foods");

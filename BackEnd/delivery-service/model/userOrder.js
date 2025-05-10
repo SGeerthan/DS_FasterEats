@@ -35,14 +35,14 @@ const userOrderSchema = new mongoose.Schema(
     deliveryStatus:  {
       type: String,
       enum: [
-        "Picked",
+        "OrderPlaced",
         "OnTheWay",
         "DeliveredFromRestaurant",
         "AcceptDelivery",
         "Delivered",
         "Declined",
       ],
-      default: "Picked",
+      default: "OrderPlaced",
     },
 
     /* NEW — assigned driver / rider info */
