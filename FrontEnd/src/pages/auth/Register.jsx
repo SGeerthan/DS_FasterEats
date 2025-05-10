@@ -7,7 +7,7 @@ import { FaFacebook } from "react-icons/fa";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import TermsCondition from "./TermsCondition.jsx";
 
-const API_URL = "http://localhost:5559/users/register";
+const API_URL = "http://localhost:8888/api/auth/users/register";
 
 export default function Register() {
   const { login } = useAuth();
@@ -73,8 +73,8 @@ export default function Register() {
   };
 
   // optional OAuth flows
-  const googleLogin   = () => (window.location.href = "http://localhost:5559/auth/google");
-  const facebookLogin = () => (window.location.href = "http://localhost:5559/auth/facebook");
+  const googleLogin   = () => (window.location.href = "http://localhost:8888/api/auth/auth/google");
+  const facebookLogin = () => (window.location.href = "http://localhost:8888/api/auth/auth/facebook");
 
   return (
     <div

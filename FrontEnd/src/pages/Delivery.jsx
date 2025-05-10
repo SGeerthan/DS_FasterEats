@@ -145,7 +145,7 @@ export default function Delivery() {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5003/api/user-orders",
+          "http://localhost:8888/api/delivery/api/user-orders",
           { headers: { Authorization: `Bearer ${jwt}` } }
         );
         setOrders(Array.isArray(data) ? data : []);
@@ -190,7 +190,7 @@ export default function Delivery() {
 
       try {
         await axios.patch(
-          `http://localhost:5003/api/user-orders/${ord._id}/status`,
+          `http://localhost:8888/api/delivery/api/user-orders/${ord._id}/status`,
           {
             deliveryStatus: "AcceptDelivery",
             deliveryPersonId: user._id,

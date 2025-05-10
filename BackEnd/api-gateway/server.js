@@ -11,7 +11,7 @@ app.use(cors());
 app.use(
   "/api/auth",
   createProxyMiddleware({
-    target: "http://localhost:5559",
+    target: "http://auth-service:5559",
     changeOrigin: true,
     onProxyRes: (proxyRes) => {
       // Allow CORS headers from the proxied service
@@ -25,7 +25,7 @@ app.use(
 app.use(
   "/api/restaurant",
   createProxyMiddleware({
-    target: "http://localhost:5560",
+    target: "http://restaurant-service:5560",
     changeOrigin: true,
     onProxyRes: (proxyRes) => {
       proxyRes.headers["Access-Control-Allow-Origin"] = "*";
@@ -38,7 +38,7 @@ app.use(
 app.use(
   "/api/order",
   createProxyMiddleware({
-    target: "http://localhost:5004",
+    target: "http://order-service:5004",
     changeOrigin: true,
     onProxyRes: (proxyRes) => {
       proxyRes.headers["Access-Control-Allow-Origin"] = "*";
@@ -51,7 +51,7 @@ app.use(
 app.use(
   "/api/payment",
   createProxyMiddleware({
-    target: "http://localhost:5025",
+    target: "http://payment-service:5025",
     changeOrigin: true,
     onProxyRes: (proxyRes) => {
       proxyRes.headers["Access-Control-Allow-Origin"] = "*";
@@ -64,7 +64,20 @@ app.use(
 app.use(
   "/api/delivery",
   createProxyMiddleware({
-    target: "http://localhost:5003",
+    target: "http://delivery-service:5003",
+    changeOrigin: true,
+    onProxyRes: (proxyRes) => {
+      proxyRes.headers["Access-Control-Allow-Origin"] = "*";
+      proxyRes.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE";
+      proxyRes.headers["Access-Control-Allow-Headers"] = "Content-Type";
+    },
+  })
+);
+
+app.use(
+  "/api/notification",
+  createProxyMiddleware({
+    target: "http://notification-service:3000",
     changeOrigin: true,
     onProxyRes: (proxyRes) => {
       proxyRes.headers["Access-Control-Allow-Origin"] = "*";

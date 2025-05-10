@@ -141,7 +141,7 @@ export default function Orders() {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5003/api/user-orders",
+          "http://localhost:8888/api/delivery/api/user-orders",
           { params: { user: user._id }, headers: authHdr() }
         );
         setOrders(Array.isArray(data) ? data : []);
@@ -160,7 +160,7 @@ export default function Orders() {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5003/api/user-orders",
+          "http://localhost:8888/api/delivery/api/user-orders",
           { headers: authHdr() }
         );
 
@@ -189,7 +189,7 @@ export default function Orders() {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5559/users/profile",
+          "http://localhost:8888/api/auth/users/profile",
           { headers: authHdr() }
         );
         setProfile(data);
@@ -446,7 +446,7 @@ function DeliveryCard({ order }) {
     setSubmitting(true);
     try {
       await axios.post(
-        `http://localhost:5559/users/${order.deliveryPersonId}/rate`,
+        `http://localhost:8888/api/auth/users/${order.deliveryPersonId}/rate`,
         { rating },
         { headers: authHdr() }
       );

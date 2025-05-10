@@ -190,7 +190,7 @@ const initialSearch = params.get("search") || "";
     useEffect(() => {
         (async () => {
             try {
-                const { data } = await axios.get("http://localhost:5560/foods");
+                const { data } = await axios.get("http://localhost:8888/api/restaurant/foods");
                 setFoods(data);
             } catch {
                 setErr("Failed to load foods");
@@ -220,7 +220,7 @@ const initialSearch = params.get("search") || "";
         (async () => {
             try {
                 const responses = await Promise.all(
-                    missing.map((id) => axios.get(`http://localhost:5559/users/${id}`))
+                    missing.map((id) => axios.get(`http://localhost:8888/api/auth/users/${id}`))
                 );
                 const namesObj = {};
                 responses.forEach((res, i) => {
@@ -323,7 +323,7 @@ const initialSearch = params.get("search") || "";
         } else {
             try {
                 const { data } = await axios.get(
-                    `http://localhost:5559/users/${ownerId}`
+                    `http://localhost:8888/api/auth/users/${ownerId}`
                 );
                 const name =
                     data.restaurantName || data.name || data.username || "Restaurant";
@@ -343,7 +343,7 @@ const initialSearch = params.get("search") || "";
     const openRest = async (ownerId) => {
         try {
             const { data } = await axios.get(
-                `http://localhost:5559/users/${ownerId}`
+                `http://localhost:8888/api/auth/users/${ownerId}`
             );
             const menu = foods.filter((f) => f.owner === ownerId);
             setRest({ user: data, menu });
@@ -355,11 +355,11 @@ const initialSearch = params.get("search") || "";
         if (!selectedRating) return;
         try {
             await axios.post(
-                `http://localhost:5559/users/${rest.user._id}/rate`,
+                `http://localhost:8888/api/auth/users/${rest.user._id}/rate`,
                 { rating: selectedRating }
             );
             const { data } = await axios.get(
-                `http://localhost:5559/users/${rest.user._id}`
+                `http://localhost:8888/api/auth/users/${rest.user._id}`
             );
             setRest((p) => ({ ...p, user: data }));
             setRateDlg(false);

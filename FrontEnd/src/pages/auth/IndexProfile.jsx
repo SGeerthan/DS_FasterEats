@@ -16,7 +16,7 @@ export default function IndexUser() {
     (async () => {
       try {
         const token = localStorage.getItem("token");
-        const { data } = await axios.get("http://localhost:5559/api/auth/users", {
+        const { data } = await axios.get("http://localhost:8888/api/auth/users", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUsers(data);
@@ -33,7 +33,7 @@ export default function IndexUser() {
     try {
       const token = localStorage.getItem("token");
       await axios.put(
-        `http://localhost:5559/api/auth/users/${id}/role`,
+        `http://localhost:8888/api/auth/users/${id}/role`,
         { role },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -48,7 +48,7 @@ export default function IndexUser() {
   const delUser = async (id) => {
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`http://localhost:5559/api/auth/users/${id}`, {
+      await axios.delete(`http://localhost:8888/api/auth/users/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers((u) => u.filter((v) => v._id !== id));
@@ -63,7 +63,7 @@ export default function IndexUser() {
     try {
       const token = localStorage.getItem("token");
       const { data } = await axios.post(
-        `http://localhost:5559/users/${id}/rate`,
+        `http://localhost:8888/api/auth/users/${id}/rate`,
         { rating: value },
         { headers: { Authorization: `Bearer ${token}` } }
       );

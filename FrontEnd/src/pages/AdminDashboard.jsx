@@ -25,7 +25,7 @@ export default function AdminDashboard() {
   useEffect(() => {
     if (!token) return;
     setLoading(true);
-    axios.get("http://localhost:5559/users", {
+    axios.get("http://localhost:8888/api/auth/users", {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setAllUsers(res.data))
@@ -59,14 +59,14 @@ export default function AdminDashboard() {
   // save edits (admin-only PUT /users/:id)
   function saveEdit() {
     axios.put(
-      `http://localhost:5559/users/${editing._id}`,
+      `http://localhost:8888/api/auth/users/${editing._id}`,
       editing,
       { headers: { Authorization: `Bearer ${token}` } }
     )
     .then(() => {
       setEditMsg("Update successful!");
       // refresh
-      return axios.get("http://localhost:5559/users", {
+      return axios.get("http://localhost:8888/api/auth/users", {
         headers: { Authorization: `Bearer ${token}` }
       });
     })
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
   // delete
   function confirmDelete() {
     axios.delete(
-      `http://localhost:5559/users/${deleting}`,
+      `http://localhost:8888/api/auth/users/${deleting}`,
       { headers: { Authorization: `Bearer ${token}` } }
     )
     .then(() => {

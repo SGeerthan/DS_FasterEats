@@ -86,7 +86,7 @@ export default function FasterEats() {
         const token =
           localStorage.getItem("token") || sessionStorage.getItem("token");
         const { data } = await axios.get(
-          "http://localhost:5559/users/profile",
+          "http://localhost:8888/api/auth/users/profile",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setProfile(data);
@@ -115,7 +115,7 @@ export default function FasterEats() {
       const token =
         localStorage.getItem("token") || sessionStorage.getItem("token");
       const { data } = await axios.post(
-        "http://localhost:5559/users/upload-profile",
+        "http://localhost:8888/api/auth/users/upload-profile",
         fd,
         {
           headers: {

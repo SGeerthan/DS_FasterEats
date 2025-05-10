@@ -39,8 +39,8 @@ export default function Restaurant() {
     if (!token) return;
     (async () => {
       const [dRes, bRes] = await Promise.all([
-        axios.get("http://localhost:5560/foods/my", { headers: authH }),
-        axios.get("http://localhost:5560/restaurant-images/my", {
+        axios.get("http://localhost:8888/api/restaurant/foods/my", { headers: authH }),
+        axios.get("http://localhost:8888/api/restaurant/restaurant-images/my", {
           headers: authH,
         }),
       ]);
@@ -60,7 +60,7 @@ export default function Restaurant() {
     (async () => {
       try {
         const { data } = await axios.get(
-          "http://localhost:5003/api/user-orders",
+          "http://localhost:8888/api/delivery/api/user-orders",
           {
             params: { regNo: user.registerNumber.toUpperCase() },
             headers: authH,
@@ -79,7 +79,7 @@ export default function Restaurant() {
     try {
       /* 1️⃣ update in order‑service (port 5003) */
       const { data: updated } = await axios.patch(
-        `http://localhost:5003/api/user-orders/${id}/status`,
+        `http://localhost:8888/api/delivery/api/user-orders/${id}/status`,
         accept
           ? { orderStatus: true, deliveryStatus: "OnTheWay" }
           : { orderStatus: false, deliveryStatus: "Declined" },
@@ -90,7 +90,7 @@ export default function Restaurant() {
       if (accept) {
         const { _id, __v, createdAt, updatedAt, ...clean } = updated; // strip mongo meta
         await axios.post(
-          "http://localhost:5004/api/user-orders",
+          "http://localhost:8888/api/order/api/user-orders",
           clean,
           { headers: { "Content-Type": "application/json" } }
         );
@@ -107,7 +107,7 @@ export default function Restaurant() {
 
   /* ───────── delete dish ───────── */
   const deleteDish = async (id) => {
-    await axios.delete(`http://localhost:5560/foods/${id}`, { headers: authH });
+    await axios.delete(`http://localhost:8888/api/restaurant/foods/${id}`, { headers: authH });
     setFoods((cur) => cur.filter((d) => d._id !== id));
   };
 

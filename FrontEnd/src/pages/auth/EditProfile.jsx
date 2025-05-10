@@ -44,7 +44,7 @@ export default function EditProfile() {
         const token =
           localStorage.getItem("token") || sessionStorage.getItem("token");
         const { data } = await axios.get(
-          "http://localhost:5559/users/profile",
+          "http://localhost:8888/api/auth/users/profile",
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setFormData({
@@ -107,7 +107,7 @@ export default function EditProfile() {
       const token =
         localStorage.getItem("token") || sessionStorage.getItem("token");
       await axios.put(
-        "http://localhost:5559/users/update",
+        "http://localhost:8888/api/auth/users/update",
         {
           firstName: formData.firstName,
           lastName: formData.lastName,

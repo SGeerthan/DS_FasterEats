@@ -39,7 +39,7 @@ export default function FoodUpload({ initial = null, onSuccess, onClose }) {
     const fd = new FormData();
     Object.entries(food).forEach(([k, v]) => fd.append(k, v));
 
-    const url    = initial ? `http://localhost:5560/foods/${initial._id}` : "http://localhost:5560/foods";
+    const url    = initial ? `http://localhost:8888/api/restaurant/foods/${initial._id}` : "http://localhost:5560/foods";
     const method = initial ? "put" : "post";
 
     await axios[method](url, fd, {

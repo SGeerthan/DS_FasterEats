@@ -28,6 +28,24 @@ exports.createUserOrder = async (req, res) => {
       await coupon.save();
     }
 
+    const pdfBuffer = await generateInvoice(userOrder);
+
+    await sendEmail({
+      to: userOrder.email,
+      subject: `Your FasterEats Invoice – Order ${userOrder.orderId}`,
+      html: `<p>Hi ${userOrder.firstName || "User"},</p><p>Thank you for your order. Please find your invoice attached.</p>`,
+      attachments: [{
+        filename: `Invoice-${userOrder.orderId}.pdf`,
+        content: pdfBuffer,
+      }],
+    });
+    
+      const smsMessage = `Hi ${userOrder.firstName || "Customer"}, your FasterEats order ${userOrder.orderId} was placed successfully! Total: ₹${userOrder.totalAmount}`;
+    await axios.post("http://localhost:3000/send-sms", {
+      to: userOrder.phone, // Ensure 'phone' field exists in request body
+      message: smsMessage,
+    });
+
     res.status(201).json({ order: userOrder, coupon });
   } catch (err) {
     console.error(err);

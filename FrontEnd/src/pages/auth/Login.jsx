@@ -24,7 +24,7 @@ export default function Login() {
     setLoading(true);
     setError(null);
     try {
-      const { data } = await axios.post("http://localhost:5559/users/login", {
+      const { data } = await axios.post("http://localhost:8888/api/auth/users/login", {
         email,
         password
       });
@@ -43,8 +43,8 @@ export default function Login() {
   };
 
   /* ---------------- OAuth ---------------- */
-  const googleLogin = () => (window.location.href = "http://localhost:5559/auth/google");
-  const facebookLogin = () => (window.location.href = "http://localhost:5559/auth/facebook");
+  const googleLogin = () => (window.location.href = "http://localhost:8888/api/auth/auth/google");
+  const facebookLogin = () => (window.location.href = "http://localhost:8888/api/auth/auth/facebook");
 
   /* ---------------- UI ---------------- */
   return (

@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const driverRoutes = require('./routes/driverRoutes');
-const userOrderRoutes = require("../delivery-service/routes/userOrder.routes.js");
+const userOrderRoutes = require("./routes/userOrder.routes");
 const cors = require('cors');
 const dotenv = require('dotenv');
 

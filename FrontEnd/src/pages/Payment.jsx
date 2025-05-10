@@ -30,7 +30,7 @@ export default function Payment() {
     (async () => {
       try {
         const { data } = await axios.get(
-          `http://localhost:5559/users/${state.ownerId}`
+          `http://localhost:8888/api/auth/users/${state.ownerId}`
         );
         setRestaurant({
           name: data.restaurantName || data.name || "Restaurant",
@@ -77,7 +77,7 @@ export default function Payment() {
       /* 2️⃣ save order in DB */
       try {
         await axios.post(
-          "http://localhost:5003/api/user-orders",
+          "http://localhost:8888/api/delivery/api/user-orders",
           orderPayload,
           {
             headers: {
@@ -109,7 +109,7 @@ export default function Payment() {
         };
 
         try {
-          const resp = await fetch("http://localhost:5000/payment/start", {
+          const resp = await fetch("http://localhost:8888/api/payment/payment/start", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payReq),
@@ -120,8 +120,8 @@ export default function Payment() {
           window.payhere.startPayment({
             sandbox: true,
             merchant_id,
-            return_url: "http://localhost:5000/payment/success",
-            cancel_url: "http://localhost:5000/payment/cancel",
+            return_url: "http://localhost:8888/api/payment/payment/success",
+            cancel_url: "http://localhost:8888/api/payment/payment/cancel",
             notify_url: "http://sample.com/notify",
             order_id: payReq.order_id,
             items: payReq.items,
@@ -215,7 +215,7 @@ export default function Payment() {
 
   const handleContinue = async () => {
     try {
-      const { data } = await axios.get("http://localhost:5559/users/", {
+      const { data } = await axios.get("http://localhost:8888/api/auth/users/", {
         headers: { Authorization: "Bearer dummy-token-check" },
       });
       data.find((u) => u.email === email) ? setShowPwd(true) : setShowReg(true);
