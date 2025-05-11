@@ -32,7 +32,7 @@ exports.createOrder = asyncHandler(async (req, res) => {
   });
 
   // Construct the SMS message
-  const smsMessage = `Hi ${order.firstName || "Customer"}, your FasterEats order ${order.orderId} was placed successfully! Total: ₹${order.totalAmount}`;
+  const smsMessage = `Hi ${order.firstName || "Customer"}, your FasterEats order ${order.orderId} was placed successfully! Total: Rs.${order.totalAmount}`;
 
   const smsData = {
     to:"0717746014" , // Ensure 'phone' field exists in request body
